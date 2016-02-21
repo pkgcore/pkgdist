@@ -9,9 +9,10 @@ from pylint import interfaces, checkers
 if hasattr(interfaces, 'IASTNGChecker'):
     print('ERROR: please install >=pylint-1.0', file=sys.stderr)
     exit(1)
+from pylint.pyreverse.utils import ASTWalker
 
 try:
-    from astroid import nodes, utils, Getattr, CallFunc, rebuilder
+    from astroid import nodes, Getattr, CallFunc, rebuilder
 except ImportError:
     print('ERROR: could not import astroid; make sure that package is '
           'installed: dev-python/astroid', file=sys.stderr)
@@ -97,7 +98,7 @@ class SnakeoilChecker(checkers.BaseChecker):
                 self.add_message('WPC08', line=node.fromlineno)
 
 
-class SnakeoilASTRewrites(utils.ASTWalker):
+class SnakeoilASTRewrites(ASTWalker):
     """Handle some of the magic imports snakeoil injects."""
 
     # Wipe the shadowing we still allow for >=py2.5 compat.
@@ -106,7 +107,7 @@ class SnakeoilASTRewrites(utils.ASTWalker):
         if x not in dir(builtins))
 
     def __init__(self, linter):
-        utils.ASTWalker.__init__(self, self)
+        ASTWalker.__init__(self, self)
         self.linter = linter
 
     def leave(self, node):
