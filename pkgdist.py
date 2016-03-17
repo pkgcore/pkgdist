@@ -114,7 +114,23 @@ def data_mapping(host_prefix, path, skip=None):
 
 
 def pkg_config(*packages, **kw):
-    """Translate pkg-config data to compatible Extension parameters."""
+    """Translate pkg-config data to compatible Extension parameters.
+
+    Example usage:
+
+    >>> from distutils.extension import Extension
+    >>> from pkgdist import pkg_config
+    >>>
+    >>> ext_kwargs = dict(
+    ...     include_dirs=['include'],
+    ...     extra_compile_args=['-std=c++11'],
+    ... )
+    >>> extensions = [
+    ...     Extension('foo', ['foo.c']),
+    ...     Extension('bar', ['bar.c'], **pkg_config('lcms2')),
+    ...     Extension('ext', ['ext.c'], **pkg_config('libusb-1.0', **ext_kwargs)),
+    ... ]
+    """
     flag_map = {
         '-I': 'include_dirs',
         '-L': 'library_dirs',
