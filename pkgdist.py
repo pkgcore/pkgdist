@@ -128,7 +128,7 @@ def pkg_config(*packages, **kw):
     >>> extensions = [
     ...     Extension('foo', ['foo.c']),
     ...     Extension('bar', ['bar.c'], **pkg_config('lcms2')),
-    ...     Extension('ext', ['ext.c'], **pkg_config(('nss', 'libusb-1.0'), **ext_kwargs)),
+    ...     Extension('ext', ['ext.cpp'], **pkg_config(('nss', 'libusb-1.0'), **ext_kwargs)),
     ... ]
     """
     flag_map = {
