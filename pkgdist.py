@@ -785,7 +785,7 @@ class PyTest(Command):
         self.test_args = [self.default_test_dir]
         self.coverage = bool(self.coverage)
         if self.match is not None:
-            self.match = tuple(set(self.match.split(',')))
+            self.test_args.extend(['-k', self.match])
 
         if self.coverage:
             try:
