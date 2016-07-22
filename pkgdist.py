@@ -145,6 +145,7 @@ def pkg_config(*packages, **kw):
         sys.exit(1)
 
     for token in tokens:
+        token = token.decode()
         if token[:2] in flag_map:
             kw.setdefault(flag_map.get(token[:2]), []).append(token[2:])
         else:
