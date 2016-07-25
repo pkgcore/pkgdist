@@ -224,11 +224,11 @@ class build_py(dst_build_py.build_py):
         dst_build_py.build_py.finalize_options(self)
 
     def _run_generate_verinfo(self, rebuilds=None):
-        from snakeoil.version import get_git_version
         ver_path = self.get_module_outfile(
             self.build_lib, (self.package_namespace,), '_verinfo')
         # this should check mtime...
         if not os.path.exists(ver_path):
+            from snakeoil.version import get_git_version
             log.info('generating _verinfo')
             with open(ver_path, 'w') as f:
                 f.write("version_info=%r" % (get_git_version('.'),))
