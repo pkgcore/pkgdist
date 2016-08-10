@@ -10,6 +10,7 @@ passing in distutils.
 Specifically, this module is only meant to be imported in setup.py scripts.
 """
 
+import copy
 import errno
 import inspect
 import io
@@ -469,9 +470,56 @@ class build_ext(dst_build_ext.build_ext):
                 if self.default_header_install_dir not in e.include_dirs:
                     e.include_dirs.append(self.default_header_install_dir)
 
+    @staticmethod
+    def determine_ext_lang(ext_path):
+        """Determine file extensions for generated cython extensions."""
+        with open(ext_path) as f:
+            for line in f:
+                line = line.lstrip()
+                if not line:
+                    continue
+                elif line[0] != '#':
+                    return None
+                line = line[1:].lstrip()
+                if line[:10] == 'distutils:':
+                    key, _, value = [s.strip() for s in line[10:].partition('=')]
+                    if key == 'language':
+                        return value
+            else:
+                return None
+
+    @staticmethod
+    def no_cythonize(extensions, **_ignore):
+        """Determine file paths for generated cython extensions."""
+        extensions = copy.deepcopy(extensions)
+        for extension in extensions:
+            sources = []
+            for sfile in extension.sources:
+                path, ext = os.path.splitext(sfile)
+                if ext in ('.pyx', '.py'):
+                    lang = build_ext.determine_ext_lang(sfile)
+                    if lang == 'c++':
+                        ext = '.cpp'
+                    else:
+                        ext = '.c'
+                    sfile = path + ext
+                sources.append(sfile)
+            extension.sources[:] = sources
+        return extensions
+
     def run(self):
         # ensure that the platform checks were performed
         self.run_command('config')
+
+        # only regenerate cython extensions if requested or required
+        USE_CYTHON = (
+            os.environ.get('USE_CYTHON', False) or
+            any(not os.path.exists(x) for ext in self.no_cythonize(self.extensions) for x in ext.sources))
+        if USE_CYTHON:
+            from Cython.Build import cythonize
+            cythonize(self.extensions)
+
+        self.extensions = self.no_cythonize(self.extensions)
         return dst_build_ext.build_ext.run(self)
 
     def build_extensions(self):
