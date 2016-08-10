@@ -204,6 +204,20 @@ class sdist(dst_sdist.sdist):
         dst_sdist.sdist.make_release_tree(self, base_dir, files)
         self.generate_verinfo(base_dir)
 
+    def run(self):
+        build_ext = self.reinitialize_command('build_ext')
+        build_ext.ensure_finalized()
+
+        # generate cython extensions if any exist
+        cython = any(
+            os.path.splitext(f)[1] == '.pyx' for e in
+            build_ext.extensions for f in e.sources)
+        if cython:
+            from Cython.Build import cythonize
+            cythonize(build_ext.extensions)
+
+        dst_sdist.sdist.run(self)
+
 
 class build_py(dst_build_py.build_py):
     """build_py command wrapper."""
