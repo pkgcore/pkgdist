@@ -96,6 +96,21 @@ def version(project=PROJECT):
     return version
 
 
+def readme(project=PROJECT):
+    """Determine a project's long description."""
+    for doc in ('README.rst', 'README'):
+        try:
+            with io.open(os.path.join(TOPDIR, doc), encoding='utf-8') as f:
+                return f.read()
+        except IOError as e:
+            if e.errno == errno.ENOENT:
+                pass
+            else:
+                raise
+
+    return None
+
+
 def get_file_paths(path):
     """Get list of all file paths under a given path."""
     for root, dirs, files in os.walk(path):
