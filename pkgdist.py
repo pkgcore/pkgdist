@@ -502,7 +502,7 @@ class build_ext(dst_build_ext.build_ext):
             else:
                 return None
 
-    def no_cythonize(self, **_ignore):
+    def no_cythonize(self):
         """Determine file paths for generated cython extensions."""
         extensions = copy.deepcopy(self.extensions)
         for extension in extensions:
@@ -525,10 +525,10 @@ class build_ext(dst_build_ext.build_ext):
         self.run_command('config')
 
         # only regenerate cython extensions if requested or required
-        USE_CYTHON = (
+        use_cython = (
             os.environ.get('USE_CYTHON', False) or
             any(not os.path.exists(x) for ext in self.no_cythonize() for x in ext.sources))
-        if USE_CYTHON:
+        if use_cython:
             from Cython.Build import cythonize
             cythonize(self.extensions)
 
