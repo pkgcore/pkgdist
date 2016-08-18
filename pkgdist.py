@@ -80,7 +80,7 @@ def version(project=PROJECT):
     """
     version = None
     try:
-        with io.open(os.path.join(project, '__init__.py'), encoding='utf-8') as f:
+        with io.open(os.path.join(TOPDIR, project, '__init__.py'), encoding='utf-8') as f:
             version = re.search(
                 r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                 f.read(), re.MULTILINE).group(1)
@@ -844,7 +844,7 @@ class PyTest(Command):
         ('match=', 'k', 'run only tests that match the provided expressions'),
     ]
 
-    default_test_dir = os.path.join(PROJECT, 'test')
+    default_test_dir = os.path.join(TOPDIR, PROJECT, 'test')
 
     def initialize_options(self):
         self.pytest_args = ''
