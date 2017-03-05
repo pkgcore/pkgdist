@@ -168,6 +168,16 @@ def pkg_config(*packages, **kw):
     return kw
 
 
+def cython_exts(path=PROJECT):
+    """Return all available cython extensions under a given path."""
+    cython_exts = []
+    for root, _dirs, files in os.walk(path):
+        for f in files:
+            if f.endswith('.pyx'):
+                cython_exts.append(os.path.join(root, f))
+    return cython_exts
+
+
 class OptionalExtension(Extension):
     """Python extension that is optional to build.
 
