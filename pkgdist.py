@@ -63,7 +63,7 @@ def find_project(topdir=TOPDIR):
     if not modules:
         raise ValueError('No project module found')
     elif len(modules) > 1:
-        raise ValueError('Multiple project modules found: %s' % (', '.join(modules)))
+        raise ValueError('Multiple project modules found in %r: %s' % (topdir, ', '.join(modules)))
 
     return modules[0]
 
