@@ -869,7 +869,7 @@ class PyTest(Command):
         ('match=', 'k', 'run only tests that match the provided expressions'),
     ]
 
-    default_test_dir = os.path.join(TOPDIR, PROJECT, 'test')
+    default_test_dir = os.path.join(TOPDIR, 'test')
 
     def initialize_options(self):
         self.pytest_args = ''
