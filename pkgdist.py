@@ -235,12 +235,10 @@ class sdist(dst_sdist.sdist):
         build_ext.ensure_finalized()
 
         # generate cython extensions if any exist
-        cython = any(
-            os.path.splitext(f)[1] == '.pyx' for e in
-            build_ext.extensions for f in e.sources)
-        if cython:
+        extensions = cython_exts()
+        if extensions:
             from Cython.Build import cythonize
-            cythonize(build_ext.extensions)
+            cythonize(extensions)
 
         dst_sdist.sdist.run(self)
 
