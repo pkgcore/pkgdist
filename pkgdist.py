@@ -952,6 +952,38 @@ class PyTest(Command):
         sys.exit(ret)
 
 
+class PyLint(Command):
+    """Run pylint on a project."""
+
+    user_options = [
+        ('errors-only', 'E', 'Check only errors with pylint'),
+        ('output-format=', 'f', 'Change the output format'),
+    ]
+
+    def initialize_options(self):
+        self.errors_only = False
+        self.output_format = 'colorized'
+
+    def finalize_options(self):
+        self.errors_only = bool(self.errors_only)
+
+    def run(self):
+        print(self.output_format)
+        try:
+            from pylint import lint
+        except ImportError:
+            raise DistutilsExecError('pylint is not installed')
+
+        lint_args = [PROJECT]
+        rcfile = os.path.join(TOPDIR, '.pylintrc')
+        if os.path.exists(rcfile):
+            lint_args.extend(['--rcfile', rcfile])
+        if self.errors_only:
+            lint_args.append('-E')
+        lint_args.extend(['--output-format', self.output_format])
+        lint.Run(lint_args)
+
+
 def print_check(message, if_yes='found', if_no='not found'):
     """Decorator to print pre/post-check messages."""
     def sub_decorator(f):
