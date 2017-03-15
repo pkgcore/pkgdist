@@ -864,23 +864,35 @@ class PyTest(Command):
         ('pytest-args=', 'a', 'arguments to pass to py.test'),
         ('coverage', 'c', 'generate coverage info'),
         ('skip-build', 's', 'skip building the module'),
+        ('test-dir=', 'd', 'directory to source tests from'),
         ('report=', 'r', 'generate and/or show a coverage report'),
         ('jobs=', 'j', 'run X parallel tests at once'),
         ('match=', 'k', 'run only tests that match the provided expressions'),
     ]
 
-    default_test_dir = os.path.join(TOPDIR, 'test')
-
     def initialize_options(self):
         self.pytest_args = ''
         self.coverage = False
         self.skip_build = False
+        self.test_dir = None
         self.match = None
         self.jobs = None
         self.report = None
 
     def finalize_options(self):
-        self.test_args = [self.default_test_dir]
+        # if a test dir isn't specified explicitly try to find one
+        if self.test_dir is None:
+            for path in (os.path.join(TOPDIR, 'test'),
+                         os.path.join(TOPDIR, 'tests'),
+                         os.path.join(TOPDIR, PROJECT, 'test'),
+                         os.path.join(TOPDIR, PROJECT, 'tests')):
+                if os.path.exists(path):
+                    self.test_dir = path
+                    break
+            else:
+                raise DistutilsExecError('cannot automatically determine test directory')
+
+        self.test_args = [self.test_dir]
         self.coverage = bool(self.coverage)
         self.skip_build = bool(self.skip_build)
         if self.verbose:
