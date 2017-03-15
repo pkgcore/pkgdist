@@ -905,8 +905,7 @@ class PyTest(Command):
                 import pytest_cov
                 self.test_args.extend(['--cov', PROJECT])
             except ImportError:
-                sys.stderr.write('error: install pytest-cov for coverage support\n')
-                sys.exit(1)
+                raise DistutilsExecError('install pytest-cov for coverage support')
 
             if self.report is None:
                 # disable coverage report output
@@ -919,8 +918,7 @@ class PyTest(Command):
                 import xdist
                 self.test_args.extend(['-n', self.jobs])
             except ImportError:
-                sys.stderr.write('error: install pytest-xdist for -j/--jobs support\n')
-                sys.exit(1)
+                raise DistutilsExecError('install pytest-xdist for -j/--jobs support')
 
         # add custom pytest args
         self.test_args.extend(shlex.split(self.pytest_args))
@@ -929,8 +927,7 @@ class PyTest(Command):
         try:
             import pytest
         except ImportError:
-            sys.stderr.write('error: pytest is not installed\n')
-            sys.exit(1)
+            raise DistutilsExecError('pytest is not installed')
 
         if self.skip_build:
             # run tests from the parent directory to the local dir isn't used for module imports
