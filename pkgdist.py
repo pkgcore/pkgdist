@@ -857,7 +857,7 @@ class test(Command):
             raise DistutilsExecError("tests failed; return %i" % (retval,))
 
 
-class PyTest(Command):
+class pytest(Command):
     """Run tests using pytest."""
 
     user_options = [
@@ -952,7 +952,7 @@ class PyTest(Command):
         sys.exit(ret)
 
 
-class PyLint(Command):
+class pylint(Command):
     """Run pylint on a project."""
 
     user_options = [
