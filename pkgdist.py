@@ -883,6 +883,8 @@ class PyTest(Command):
         self.test_args = [self.default_test_dir]
         self.coverage = bool(self.coverage)
         self.skip_build = bool(self.skip_build)
+        if self.verbose:
+            self.test_args.append('-v')
         if self.match is not None:
             self.test_args.extend(['-k', self.match])
 
