@@ -1,4 +1,3 @@
-
 """Pylint plugin checking for trailing whitespace."""
 
 from __future__ import print_function
