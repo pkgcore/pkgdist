@@ -967,7 +967,8 @@ class pytest(Command):
                 shutil.copyfile(os.path.join(TOPDIR, '.coveragerc'),
                                 os.path.join(builddir, '.coveragerc'))
 
-        ret = subprocess.call([sys.executable, '-m', 'pytest'] + self.test_args, cwd=builddir)
+        sys.path.insert(0, builddir)
+        ret = pytest.main(self.test_args)
         sys.exit(ret)
 
 
