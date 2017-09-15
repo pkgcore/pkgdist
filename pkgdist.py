@@ -50,6 +50,7 @@ def find_project(topdir=TOPDIR):
     """
     topdir_depth = len(topdir.split('/'))
     modules = []
+    project = None
 
     # look for a top-level module
     for root, dirs, files in os.walk(topdir):
@@ -59,12 +60,30 @@ def find_project(topdir=TOPDIR):
         if '__init__.py' in files:
             modules.append(os.path.basename(root))
 
-    if not modules:
-        raise ValueError('No project module found')
+    if len(modules) == 1:
+        project = modules[0]
     elif len(modules) > 1:
-        raise ValueError('Multiple project modules found in %r: %s' % (topdir, ', '.join(modules)))
+        # Multiple modules found in the base directory, searching for one that
+        # defines __title__.
+        projects = []
+        for m in modules:
+            with io.open(os.path.join(topdir, m, '__init__.py'), encoding='utf-8') as f:
+                try:
+                    projects.append(re.search(
+                        r'^__title__\s*=\s*[\'"]([^\'"]*)[\'"]',
+                        f.read(), re.MULTILINE).group(1))
+                except AttributeError:
+                    continue
 
-    return modules[0]
+        if not projects or len(projects) > 1:
+            raise ValueError(
+                'Multiple project modules found in %r: %s' % (topdir, ', '.join(modules)))
+        else:
+            project = projects[0]
+
+    if project is None:
+        raise ValueError('No project module found')
+    return project
 
 
 # determine the project we're being imported into
