@@ -919,7 +919,7 @@ class pytest(Command):
         if self.match is not None:
             self.test_args.extend(['-k', self.match])
 
-        if self.coverage:
+        if self.coverage or self.report:
             try:
                 import pytest_cov
                 self.test_args.extend(['--cov', PROJECT])
