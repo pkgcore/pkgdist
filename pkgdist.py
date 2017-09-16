@@ -949,8 +949,7 @@ class pytest(Command):
             raise DistutilsExecError('pytest is not installed')
 
         if self.skip_build:
-            # run tests from the parent directory to the local dir isn't used for module imports
-            builddir = os.path.abspath('..')
+            builddir = TOPDIR
         else:
             # build extensions and byte-compile python
             build_ext = self.reinitialize_command('build_ext')
@@ -960,15 +959,17 @@ class pytest(Command):
             self.run_command('build_ext')
             self.run_command('build_py')
 
-            # Change the current working directory to the builddir during testing
-            # so coverage paths are correct.
             builddir = os.path.abspath(build_py.build_lib)
             if self.coverage and os.path.exists(os.path.join(TOPDIR, '.coveragerc')):
                 shutil.copyfile(os.path.join(TOPDIR, '.coveragerc'),
                                 os.path.join(builddir, '.coveragerc'))
 
         sys.path.insert(0, builddir)
-        ret = pytest.main(self.test_args)
+        from snakeoil.contexts import chdir
+        # Change the current working directory to the builddir during testing
+        # so coverage paths are correct.
+        with chdir(builddir):
+            ret = pytest.main(self.test_args)
         sys.exit(ret)
 
 
