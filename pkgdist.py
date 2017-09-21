@@ -14,6 +14,7 @@ import copy
 import errno
 import io
 import math
+from multiprocessing import cpu_count
 import operator
 import os
 import re
@@ -257,7 +258,7 @@ class sdist(dst_sdist.sdist):
         extensions = cython_exts()
         if extensions:
             from Cython.Build import cythonize
-            cythonize(extensions)
+            cythonize(extensions, nthreads=cpu_count())
 
         dst_sdist.sdist.run(self)
 
@@ -331,8 +332,7 @@ class build_py2to3(build_py):
         from snakeoil.dist import caching_2to3
 
         if proc_count == 0:
-            import multiprocessing
-            proc_count = multiprocessing.cpu_count()
+            proc_count = cpu_count()
 
         assert proc_count >= 1
 
@@ -573,7 +573,7 @@ class build_ext(dst_build_ext.build_ext):
             any(not os.path.exists(x) for ext in self.no_cythonize() for x in ext.sources))
         if use_cython:
             from Cython.Build import cythonize
-            cythonize(self.extensions)
+            cythonize(self.extensions, nthreads=cpu_count())
 
         self.extensions = self.no_cythonize()
         return dst_build_ext.build_ext.run(self)
