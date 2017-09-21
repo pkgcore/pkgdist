@@ -20,13 +20,13 @@ if [[ ${TRAVIS_PYTHON_VERSION} == "2.7" ]] && [[ -n ${TRAVIS_TAG} ]]; then
 	sudo pip install cibuildwheel
 	cibuildwheel --output-dir dist
 
-	# upload dist files to pypi
-	sudo pip install "twine>=1.8.1"
-
 	# show the produced dist files
 	ls dist/
 	tar -ztf dist/*.tar.gz | sort
-	#twine upload dist/*
+
+	# upload dist files to pypi
+	sudo pip install "twine>=1.8.1"
+	twine upload dist/*
 fi
 
 exit 0
