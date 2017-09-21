@@ -22,7 +22,8 @@ if [[ ${TRAVIS_PYTHON_VERSION} == "2.7" ]] && [[ -n ${TRAVIS_TAG} ]]; then
 
 	# upload dist files to pypi
 	sudo pip install "twine>=1.8.1"
-	twine upload dist/*
+	ls dist/
+	#twine upload dist/*
 fi
 
 exit 0
