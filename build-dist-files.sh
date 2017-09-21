@@ -6,9 +6,13 @@
 
 set -ev
 
+# make sure pip is installed for python3
+curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | sudo python3
+
 if [[ ${TRAVIS_PYTHON_VERSION} == "2.7" ]] && [[ -n ${TRAVIS_TAG} ]]; then
 	# create sdist
 	python3 -m pip install -r requirements.txt
+	python3 -m pip install sphinx
 	python3 setup.py sdist
 
 	# create wheels
