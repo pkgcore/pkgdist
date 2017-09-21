@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build and upload dist files to pypi on travis-ci.
 #
-# Note that this assumes PYPI_USER and PYPI_PASSWORD are securely exported in
+# Note that this assumes TWINE_USERNAME and TWINE_PASSWORD are securely exported in
 # order for twine to work properly.
 
 set -ev
@@ -26,7 +26,7 @@ if [[ ${TRAVIS_PYTHON_VERSION} == "2.7" ]] && [[ -n ${TRAVIS_TAG} ]]; then
 
 	# upload dist files to pypi
 	sudo pip install "twine>=1.8.1"
-	sudo twine upload dist/*
+	twine upload dist/*
 fi
 
 exit 0
