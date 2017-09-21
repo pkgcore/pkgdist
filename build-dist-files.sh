@@ -12,16 +12,16 @@ curl https://bootstrap.pypa.io/get-pip.py | sudo python3
 
 if [[ ${TRAVIS_PYTHON_VERSION} == "2.7" ]] && [[ -n ${TRAVIS_TAG} ]]; then
 	# create sdist
-	pip3 install -r requirements.txt
-	pip3 install sphinx
+	sudo pip3 install -r requirements.txt
+	sudo pip3 install sphinx
 	python3 setup.py sdist
 
 	# create wheels
-	pip install cibuildwheel
+	sudo pip install cibuildwheel
 	cibuildwheel --output-dir dist
 
 	# upload dist files to pypi
-	pip install "twine>=1.8.1"
+	sudo pip install "twine>=1.8.1"
 	twine upload dist/*
 fi
 
