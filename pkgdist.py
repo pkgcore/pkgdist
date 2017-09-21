@@ -188,14 +188,37 @@ def pkg_config(*packages, **kw):
     return kw
 
 
-def cython_exts(path=PROJECT):
-    """Return all available cython extensions under a given path."""
+def cython_exts(build_deps=None, build_exts=None, build_opts=None, path=PROJECT):
+    """Prepare all cython extensions under a given path to be built."""
+    build_deps = build_deps if build_deps is not None else []
+    build_exts = build_exts if build_exts is not None else []
+    build_opts = build_opts if build_opts is not None else {}
+
+    pyx_files = (
+        os.path.join(root, f) for root, _dirs, files in os.walk(path)
+        for f in files if f.endswith('.pyx')
+    )
+
+    exts = []
     cython_exts = []
-    for root, _dirs, files in os.walk(path):
-        for f in files:
-            if f.endswith('.pyx'):
-                cython_exts.append(os.path.join(root, f))
-    return cython_exts
+
+    for ext in pyx_files:
+        cythonized = os.path.join(path, os.path.splitext(ext)[0] + '.c')
+        if os.path.exists(cythonized):
+            exts.append(cythonized)
+        else:
+            cython_exts.append(ext)
+
+    # require cython to build exts as necessary
+    if cython_exts:
+        build_deps.append('cython')
+        exts.extend(cython_exts)
+
+    build_exts.extend(
+        Extension(os.path.splitext(ext)[0].replace(os.path.sep, '.'), [ext], **build_opts)
+        for ext in exts)
+
+    return build_deps, build_exts
 
 
 class OptionalExtension(Extension):
