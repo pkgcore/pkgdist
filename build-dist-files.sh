@@ -6,11 +6,10 @@
 
 set -ev
 
-# make sure pip is installed for python3
-python3 --version
-curl https://bootstrap.pypa.io/get-pip.py | sudo python3
-
 if [[ ${TRAVIS_PYTHON_VERSION} == "2.7" ]] && [[ -n ${TRAVIS_TAG} ]]; then
+	# make sure pip is installed for python3
+	curl https://bootstrap.pypa.io/get-pip.py | sudo python3
+
 	# create sdist
 	sudo pip3 install -r requirements.txt
 	sudo pip3 install sphinx
