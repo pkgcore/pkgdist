@@ -6,7 +6,7 @@
 
 set -ev
 
-if [[ ${TRAVIS_PYTHON_VERSION} == "3.6" ]] && [[ -n ${TRAVIS_TAG} ]]; then
+if [[ ${TRAVIS_PYTHON_VERSION} == "3.6" ]]; then
 	# create sdist
 	pip install -r requirements/dist.txt
 	python setup.py sdist
@@ -19,7 +19,7 @@ if [[ ${TRAVIS_PYTHON_VERSION} == "3.6" ]] && [[ -n ${TRAVIS_TAG} ]]; then
 	tar -ztf dist/*.tar.gz | sort
 
 	# upload dist files to pypi
-	twine upload dist/*
+	#twine upload dist/*
 fi
 
 exit 0
