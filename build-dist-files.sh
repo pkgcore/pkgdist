@@ -6,12 +6,17 @@
 
 set -ev
 
-if [[ ${TRAVIS_PYTHON_VERSION} == "3.6" ]] && [[ -n ${TRAVIS_TAG} ]]; then
+if [[ ${TRAVIS_PYTHON_VERSION} == "2.7" ]] && [[ -n ${TRAVIS_TAG} ]]; then
+	# make sure pip is installed for python3
+	curl https://bootstrap.pypa.io/get-pip.py | sudo python3
+
 	# create sdist
-	pip install -r requirements/dist.txt
-	python setup.py sdist
+	sudo pip3 install -r requirements.txt
+	sudo pip3 install sphinx
+	python3 setup.py sdist
 
 	# create wheels
+	sudo pip install cibuildwheel
 	cibuildwheel --output-dir dist
 
 	# show the produced dist files
@@ -19,6 +24,8 @@ if [[ ${TRAVIS_PYTHON_VERSION} == "3.6" ]] && [[ -n ${TRAVIS_TAG} ]]; then
 	tar -ztf dist/*.tar.gz | sort
 
 	# upload dist files to pypi
+	sudo pip install -U urllib3[secure]
+	sudo pip install "twine>=1.8.1"
 	twine upload dist/*
 fi
 
