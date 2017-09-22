@@ -21,7 +21,7 @@ if [[ -n ${TRAVIS_TAG} ]] || [[ ${TRAVIS_EVENT_TYPE} == api ]]; then
 		tar -ztf dist/*.tar.gz | sort
 
 		# only deploy tagged releases
-		if [[ -n ${TRAVIS_TAG} ]]; then
+		if ${TRAVIS_SECURE_ENV_VARS} && [[ -n ${TRAVIS_TAG} ]]; then
 			# upload dist files to pypi
 			twine upload dist/*
 		fi
