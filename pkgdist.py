@@ -27,6 +27,7 @@ import textwrap
 os.environ["SNAKEOIL_DEMANDLOAD_PROTECTION"] = 'n'
 os.environ["SNAKEOIL_DEMANDLOAD_WARN"] = 'n'
 
+from setuptools import find_packages
 from setuptools.command import install as dst_install
 
 from distutils import log
@@ -135,6 +136,39 @@ def readme(topdir=TOPDIR):
                 raise
 
     return None
+
+
+def setup():
+    """Parameters and commands for setuptools."""
+    params = {
+        'name': MODULE,
+        'version': version(),
+        'long_description': readme(),
+        'packages': find_packages(MODULEDIRNAME),
+        'package_dir': {'':MODULEDIRNAME},
+        'install_requires': install_requires(),
+    }
+
+    cmds = {
+        'sdist': sdist,
+    }
+
+    # check for scripts
+    if os.path.exists(os.path.join(TOPDIR, 'bin')):
+        params['scripts'] = os.listdir('bin')
+        cmds['build_scripts'] = build_scripts
+
+    # check for docs
+    if os.path.exists(os.path.join(TOPDIR, 'doc')):
+        cmds['build_docs'] = build_docs
+        cmds['install_docs'] = install_docs
+
+    # check for man pages
+    if os.path.exists(os.path.join(TOPDIR, 'doc', 'man')):
+        cmds['build_man'] = build_man
+        cmds['install_man'] = install_man
+
+    return params, cmds
 
 
 def _requires(path):
