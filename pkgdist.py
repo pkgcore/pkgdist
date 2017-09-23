@@ -150,6 +150,11 @@ def _requires(path):
     return None
 
 
+def build_requires():
+    """Determine a project's build dependencies."""
+    return _requires(os.path.join(TOPDIR, 'requirements', 'build.txt'))
+
+
 def install_requires():
     """Determine a project's runtime dependencies."""
     return _requires(os.path.join(TOPDIR, 'requirements', 'install.txt'))
