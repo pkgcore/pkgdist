@@ -334,7 +334,9 @@ class sdist(dst_sdist.sdist):
         exist in a working tree.
         """
 
-        if 'build_man' in self.distribution.cmdclass:
+        # don't build man pages when running under tox
+        if ('build_man' in self.distribution.cmdclass and
+                not os.path.basename(os.environ.get('_', '')) == 'tox'):
             build_man = self.reinitialize_command('build_man')
             build_man.ensure_finalized()
             self.run_command('build_man')
