@@ -95,7 +95,7 @@ def find_moduledir(searchdir=TOPDIR):
 
 
 # determine the main module we're being used to package
-MODULEDIR = find_moduledir() 
+MODULEDIR = find_moduledir()
 MODULEDIRNAME = os.path.dirname(MODULEDIR)
 MODULE = os.path.basename(MODULEDIR)
 
@@ -145,7 +145,7 @@ def setup():
         'version': version(),
         'long_description': readme(),
         'packages': find_packages(MODULEDIRNAME),
-        'package_dir': {'':MODULEDIRNAME},
+        'package_dir': {'':os.path.basename(MODULEDIRNAME)},
         'install_requires': install_requires(),
     }
 
