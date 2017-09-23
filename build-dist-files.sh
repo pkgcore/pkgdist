@@ -26,5 +26,6 @@ if [[ -n ${TRAVIS_TAG} ]] || [[ ${TRAVIS_EVENT_TYPE} == api ]]; then
 			twine upload dist/*
 		fi
 	fi
+fi
 
 exit 0
