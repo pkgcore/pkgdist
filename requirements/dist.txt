@@ -1,4 +1,3 @@
--r release.txt
 -r docs.txt
 
 cibuildwheel>=0.5.1
