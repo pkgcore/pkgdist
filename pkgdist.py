@@ -1240,6 +1240,7 @@ class config(dst_config.config):
             % (typename, member), headers, include_dirs, lang)
 
 
+# directly copied from snakeoil.contexts
 @contextmanager
 def syspath(path, condition=True, position=0):
     """Context manager that mangles sys.path and then reverts on exit.
