@@ -514,6 +514,18 @@ class build_py3to2(build_py2to3):
         log.info("completed py2k conversions")
 
 
+def generate_html():
+    """Generate html docs for the project."""
+    from snakeoil.dist.generate_docs import generate_html
+    generate_html(TOPDIR, PACKAGEDIR, MODULE)
+
+
+def generate_man():
+    """Generate man pages for the project."""
+    from snakeoil.dist.generate_docs import generate_man
+    generate_man(TOPDIR, PACKAGEDIR, MODULE)
+
+
 class build_man(Command):
     """Build man pages.
 
@@ -552,8 +564,7 @@ class build_man(Command):
             with syspath(os.path.abspath(build_py.build_lib)):
                 # generate man page content for scripts we create
                 if 'build_scripts' in self.distribution.cmdclass:
-                    from snakeoil.dist.generate_docs import generate_man
-                    generate_man(TOPDIR, PACKAGEDIR, MODULE)
+                    generate_man()
 
                 # generate man pages
                 build_sphinx = self.reinitialize_command('build_sphinx')
@@ -583,8 +594,7 @@ class build_docs(build_man):
             self.run_command('build_man')
 
             # generate API docs
-            from snakeoil.dist.generate_docs import generate_html
-            generate_html(TOPDIR, PACKAGEDIR, MODULE)
+            generate_html()
 
             # generate html docs -- allow build_sphinx cmd to run again
             build_sphinx = self.reinitialize_command('build_sphinx')
