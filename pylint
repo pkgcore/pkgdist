@@ -12,5 +12,6 @@ from pylint import lint
 
 try:
     lint.Run(['--rcfile', pjoin(path, 'pylintrc')] + sys.argv[1:])
-except KeyboardInterrupt:
+except Exception as e:
+    print(e)
     sys.exit(1)

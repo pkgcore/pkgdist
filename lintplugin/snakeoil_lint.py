@@ -2,12 +2,11 @@
 
 from __future__ import print_function
 import sys
-import __builtin__ as builtins
 
 from pylint import interfaces, checkers
 if hasattr(interfaces, 'IASTNGChecker'):
     print('ERROR: please install >=pylint-1.0', file=sys.stderr)
-    exit(1)
+    sys.exit(1)
 from pylint.pyreverse.utils import ASTWalker
 
 try:
@@ -99,11 +98,6 @@ class SnakeoilChecker(checkers.BaseChecker):
 
 class SnakeoilASTRewrites(ASTWalker):
     """Handle some of the magic imports snakeoil injects."""
-
-    # Wipe the shadowing we still allow for >=py2.5 compat.
-    ignore_shadowing = frozenset(
-        x for x in ('intern', 'cmp')
-        if x not in dir(builtins))
 
     def __init__(self, linter):
         ASTWalker.__init__(self, self)
