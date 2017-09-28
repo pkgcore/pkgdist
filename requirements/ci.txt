@@ -1,4 +1,2 @@
--r build.txt
-
 tox
 codecov
