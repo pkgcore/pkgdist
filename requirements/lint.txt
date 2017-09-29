@@ -1,3 +1,4 @@
+# deps for linting projects
 snakeoil
 
 pylint
