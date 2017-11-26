@@ -6,26 +6,21 @@
 
 set -ev
 
-# either we're running for a release or a explicitly requested build via API
-if [[ -n ${TRAVIS_TAG} ]] || [[ ${TRAVIS_EVENT_TYPE} == api ]]; then
-	if [[ ${TRAVIS_PYTHON_VERSION} == "3.6" ]]; then
-		# create sdist
-		pip install -r requirements/dist.txt
-		python setup.py sdist
+# create sdist
+pip install -r requirements/dist.txt
+python setup.py sdist
 
-		# create wheels
-		cibuildwheel --output-dir dist
+# create wheels
+cibuildwheel --output-dir dist
 
-		# show the produced dist files
-		ls dist/
-		tar -ztf dist/*.tar.gz | sort
+# show the produced dist files
+ls dist/
+tar -ztf dist/*.tar.gz | sort
 
-		# only deploy tagged releases
-		if ${TRAVIS_SECURE_ENV_VARS} && [[ -n ${TRAVIS_TAG} ]]; then
-			# upload dist files to pypi
-			twine upload dist/*
-		fi
-	fi
+# only deploy tagged releases
+if ${TRAVIS_SECURE_ENV_VARS} && [[ -n ${TRAVIS_TAG} ]]; then
+	# upload dist files to pypi
+	twine upload dist/*
 fi
 
 exit 0
