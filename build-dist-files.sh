@@ -5,6 +5,7 @@
 # securely exported to the environment in order for twine to work properly.
 
 set -ev
+shopt -s nullglob
 
 # install deps
 pip install -r requirements/dist.txt
@@ -13,6 +14,18 @@ pip install -r requirements/dist.txt
 # decrease the amount of test workarounds
 CIBW_PATH=$(pip show cibuildwheel | grep Location | cut -d' ' -f 2)/cibuildwheel
 sed -i "s:'CIBUILDWHEEL',:\0 '--privileged',:" "${CIBW_PATH}"/linux.py
+
+# download binaries to update old centos 5 manylinux containers
+DOWNLOAD_DIR="${HOME}/downloads"
+for rpms in "${TRAVIS_BUILD_DIR}"/ci/cibuildwheel-bins/*; do
+	arch=$(basename ${rpms})
+	mkdir -p "${DOWNLOAD_DIR}"/${arch}
+	while read url; do
+		if [[ ! -f "${DOWNLOAD_DIR}/${arch}/$(basename ${url})" ]]; then
+			wget -P "${DOWNLOAD_DIR}"/${arch} "${url}"
+		fi
+	done < "${rpms}"
+done
 
 # create sdist
 python setup.py sdist
