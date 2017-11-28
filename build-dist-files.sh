@@ -6,8 +6,15 @@
 
 set -ev
 
-# create sdist
+# install deps
 pip install -r requirements/dist.txt
+
+# hack cibuildwheel to run docker in privileged mode in order to
+# decrease the amount of test workarounds
+CIBW_PATH=$(pip show cibuildwheel | grep Location | cut -d' ' -f 2)/cibuildwheel
+sed -i "s:'CIBUILDWHEEL',:\0 '--privileged',:" "${CIBW_PATH}"/linux.py
+
+# create sdist
 python setup.py sdist
 
 # create wheels
