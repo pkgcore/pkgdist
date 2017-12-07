@@ -21,8 +21,10 @@ for rpms in "${TRAVIS_BUILD_DIR}"/ci/cibuildwheel-bins/*; do
 	arch=$(basename ${rpms})
 	mkdir -p "${DOWNLOAD_DIR}"/${arch}
 	while read url; do
-		if [[ ! -f "${DOWNLOAD_DIR}/${arch}/$(basename ${url})" ]]; then
-			wget -P "${DOWNLOAD_DIR}"/${arch} "${url}"
+		if [[ -n ${url} && ${url:0:1} != '#' ]]; then
+			if [[ ! -f "${DOWNLOAD_DIR}/${arch}/$(basename ${url})" ]]; then
+				wget -P "${DOWNLOAD_DIR}"/${arch} "${url}"
+			fi
 		fi
 	done < "${rpms}"
 done
