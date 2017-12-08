@@ -8,7 +8,7 @@ set -ev
 shopt -s nullglob
 
 # install deps
-"${BASH_SOURCE[0]%/*}/requirements/pip.sh" -rrequirements/dist.txt
+pip install -r requirements/dist.txt
 
 # hack cibuildwheel to run docker in privileged mode in order to
 # decrease the amount of test workarounds
