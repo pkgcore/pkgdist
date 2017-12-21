@@ -10,6 +10,9 @@ passing in distutils.
 Specifically, this module is only meant to be imported in setup.py scripts.
 """
 
+# TODO: merge this back into snakeoil once pip implements PEPs 517 and 518
+# https://github.com/pypa/pip/issues/4802
+
 from contextlib import contextmanager
 import copy
 import errno
