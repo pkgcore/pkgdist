@@ -153,11 +153,13 @@ def setup():
         'packages': find_packages(PACKAGEDIR),
         'package_dir': {'':os.path.basename(PACKAGEDIR)},
         'install_requires': install_requires(),
+        'tests_require': test_requires(),
     }
 
     cmds = {
         'sdist': sdist,
         'build_py': build_py,
+        'test': pytest,
     }
 
     # check for scripts
