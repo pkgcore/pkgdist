@@ -1016,6 +1016,7 @@ class pytest(Command):
         ('report=', 'r', 'generate and/or show a coverage report'),
         ('jobs=', 'j', 'run X parallel tests at once'),
         ('match=', 'k', 'run only tests that match the provided expressions'),
+        ('targets=', 't', 'target tests to run'),
     ]
 
     def initialize_options(self):
@@ -1024,6 +1025,7 @@ class pytest(Command):
         self.skip_build = False
         self.test_dir = None
         self.match = None
+        self.targets = ''
         self.jobs = None
         self.report = None
 
@@ -1040,7 +1042,12 @@ class pytest(Command):
             else:
                 raise DistutilsExecError('cannot automatically determine test directory')
 
-        self.test_args = [self.test_dir]
+        self.test_args = []
+        if self.targets is not None:
+            targets = [os.path.join(self.test_dir, x) for x in self.targets.split()]
+            self.test_args.extend(targets)
+        else:
+            self.test_args.append(self.test_dir)
         self.coverage = bool(self.coverage)
         self.skip_build = bool(self.skip_build)
         if self.verbose:
