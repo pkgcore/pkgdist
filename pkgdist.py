@@ -1093,6 +1093,9 @@ class pytest(Command):
             self.run_command('build_py')
             builddir = os.path.abspath(build_py.build_lib)
 
+        # force reimport of project from builddir
+        sys.modules.pop(MODULE, None)
+
         with syspath(builddir):
             from snakeoil.contexts import chdir
             # Change the current working directory to the builddir during testing
