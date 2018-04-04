@@ -38,6 +38,7 @@ cibuildwheel --output-dir dist
 # show the produced dist files
 ls dist/
 tar -ztf dist/*.tar.gz | sort
+sha512sum dist/*.tar.gz
 
 # only deploy tagged releases
 if ${TRAVIS_SECURE_ENV_VARS} && [[ -n ${TRAVIS_TAG} ]]; then
