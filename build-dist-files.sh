@@ -7,6 +7,8 @@
 set -ev
 shopt -s nullglob
 
+# make sure any git-based deps are installed
+./requirements/pip.sh
 # install deps
 pip install -r requirements/dist.txt
 
