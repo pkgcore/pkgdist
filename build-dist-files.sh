@@ -30,7 +30,7 @@ for urls in "${TRAVIS_BUILD_DIR}"/ci/cibuildwheel-bins/*; do
 done
 
 # create sdist
-python setup.py sdist
+python setup.py sdist -v
 
 # create wheels
 cibuildwheel --output-dir dist
