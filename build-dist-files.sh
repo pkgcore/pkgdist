@@ -43,6 +43,7 @@ sha512sum dist/*.tar.gz
 # only deploy tagged releases
 if ${TRAVIS_SECURE_ENV_VARS} && [[ -n ${TRAVIS_TAG} ]]; then
 	# upload dist files to pypi
+	echo "uploading for files for tag ${TRAVIS_TAG}"
 	twine upload dist/*
 fi
 
