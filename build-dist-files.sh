@@ -4,6 +4,8 @@
 # Note that deploying to pypi assumes TWINE_USERNAME and TWINE_PASSWORD are
 # securely exported to the environment in order for twine to work properly.
 
+PKGDIST_PATH=${BASH_SOURCE[0]%/*}
+
 set -ev
 shopt -s nullglob
 
@@ -17,7 +19,7 @@ sed -i "s:'CIBUILDWHEEL',:\0 '--privileged',:" "${CIBW_PATH}"/linux.py
 
 # download binaries to update old centos 5 manylinux containers
 DOWNLOAD_DIR="${HOME}/downloads"
-for urls in "${TRAVIS_BUILD_DIR}"/ci/cibuildwheel-bins/*; do
+for urls in "${PKGDIST_PATH}"/cibuildwheel/*; do
 	arch=$(basename ${urls})
 	mkdir -p "${DOWNLOAD_DIR}"/${arch}
 	while read url; do
