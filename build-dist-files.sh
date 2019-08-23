@@ -17,8 +17,8 @@ sed -i "s:'CIBUILDWHEEL',:\0 '--privileged',:" "${CIBW_PATH}"/linux.py
 
 # download binaries to update old centos 5 manylinux containers
 DOWNLOAD_DIR="${HOME}/downloads"
-for rpms in "${TRAVIS_BUILD_DIR}"/ci/cibuildwheel-bins/*; do
-	arch=$(basename ${rpms})
+for urls in "${TRAVIS_BUILD_DIR}"/ci/cibuildwheel-bins/*; do
+	arch=$(basename ${urls})
 	mkdir -p "${DOWNLOAD_DIR}"/${arch}
 	while read url; do
 		if [[ -n ${url} && ${url:0:1} != '#' ]]; then
@@ -26,7 +26,7 @@ for rpms in "${TRAVIS_BUILD_DIR}"/ci/cibuildwheel-bins/*; do
 				wget -P "${DOWNLOAD_DIR}"/${arch} "${url}"
 			fi
 		fi
-	done < "${rpms}"
+	done < "${urls}"
 done
 
 # create sdist
