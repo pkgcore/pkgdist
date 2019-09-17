@@ -10,8 +10,8 @@ cp -Rv "${PKGDIST_PATH}"/requirements/* requirements/
 
 "${PKGDIST_PATH}"/requirements/pip.sh -rrequirements/ci.txt
 
-# use git-based build deps for non-tagged releases
-if [[ -z ${TRAVIS_TAG} ]]; then
+# use git-based build deps for dev tests
+if [[ -z ${TRAVIS_SECURE_ENV_VARS} ]] && [[ -z ${TRAVIS_TAG} ]]; then
 	cp -v requirements/pyproject-dev.toml pyproject.toml
 fi
 
