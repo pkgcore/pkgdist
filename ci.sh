@@ -12,7 +12,9 @@ requirements/pip.sh -rrequirements/ci.txt
 
 # use git-based build deps for dev tests
 if [[ ${TRAVIS_BRANCH} != "deploy" ]] && [[ -z ${TRAVIS_TAG} ]]; then
-	cp -v requirements/pyproject-dev.toml pyproject.toml
+	if [[ -f requirements/pyproject-dev.toml ]]; then
+		cp -v requirements/pyproject-dev.toml pyproject.toml
+	fi
 fi
 
 exit 0
