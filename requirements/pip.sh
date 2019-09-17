@@ -24,7 +24,7 @@ if [[ ! -f ${INSTALLED} ]]; then
 		while read -r dep; do
 			# skip installing deps when installing directly from git repos
 			if [[ ${dep} =~ ^https?://.* ]]; then
-				pip install -I --no-deps --no-build-isolation ${dep}
+				pip install -I --no-deps ${dep}
 			else
 				pip install -I ${dep}
 			fi
