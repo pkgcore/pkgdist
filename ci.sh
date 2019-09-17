@@ -8,7 +8,7 @@ shopt -s nullglob
 
 cp -Rv "${PKGDIST_PATH}"/requirements/* requirements/
 
-"${PKGDIST_PATH}"/requirements/pip.sh -rrequirements/ci.txt
+requirements/pip.sh -rrequirements/ci.txt
 
 # use git-based build deps for dev tests
 if [[ -z ${TRAVIS_SECURE_ENV_VARS} ]] && [[ -z ${TRAVIS_TAG} ]]; then
