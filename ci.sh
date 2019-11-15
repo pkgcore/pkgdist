@@ -10,10 +10,10 @@ cp -Rv "${PKGDIST_PATH}"/requirements/* requirements/
 
 requirements/pip.sh -rrequirements/ci.txt
 
-# use git-based build deps for dev tests
-if [[ ${TRAVIS_BRANCH} != "deploy" ]] && [[ -z ${TRAVIS_TAG} ]]; then
-	if [[ -f requirements/pyproject-dev.toml ]]; then
-		cp -v requirements/pyproject-dev.toml pyproject.toml
+# use versioned build deps for releases
+if [[ ${TRAVIS_BRANCH} == "deploy" ]] || [[ -n ${TRAVIS_TAG} ]]; then
+	if [[ -f requirements/pyproject.toml ]]; then
+		cp -v requirements/pyproject.toml pyproject.toml
 	fi
 fi
 
