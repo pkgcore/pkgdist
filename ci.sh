@@ -8,8 +8,6 @@ shopt -s nullglob
 
 cp -Rv "${PKGDIST_PATH}"/requirements/* requirements/
 
-requirements/pip.sh -rrequirements/ci.txt
-
 # use versioned build deps for releases
 if [[ ${TRAVIS_BRANCH} == "deploy" ]] || [[ -n ${TRAVIS_TAG} ]]; then
 	if [[ -f requirements/pyproject.toml ]]; then
