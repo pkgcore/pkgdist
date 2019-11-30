@@ -8,8 +8,8 @@ shopt -s nullglob
 
 cp -Rv "${PKGDIST_PATH}"/requirements/* requirements/
 
-# install build and test deps
-requirements/pip.sh -rrequirements/test.txt
+# install build deps
+requirements/pip.sh
 
 # use versioned build deps for releases
 if [[ ${TRAVIS_BRANCH} == "deploy" ]] || [[ -n ${TRAVIS_TAG} ]]; then
