@@ -6,6 +6,9 @@
 DIR=${BASH_SOURCE[0]%/*}
 PACKAGES=( "$@" )
 
+# forcibly update to the latest pip release
+pip install -U pip
+
 # Try installing the latest build/runtime deps once, if they don't exist
 # install directly from the git.
 INSTALLED="${VIRTUAL_ENV}"/.installed_deps
