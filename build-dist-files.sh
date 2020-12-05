@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-# Build and upload dist files to pypi on travis-ci.
-#
-# Note that deploying to pypi assumes TWINE_USERNAME and TWINE_PASSWORD are
-# securely exported to the environment in order for twine to work properly.
+# Build dist files to deploy to pypi for python projects.
 
 PKGDIST_PATH=${BASH_SOURCE[0]%/*}
 
@@ -41,12 +38,5 @@ cibuildwheel --output-dir dist
 ls dist/
 tar -ztf dist/*.tar.gz | sort
 sha512sum dist/*.tar.gz
-
-# only deploy tagged releases
-if ${TRAVIS_SECURE_ENV_VARS} && [[ -n ${TRAVIS_TAG} ]]; then
-	# upload dist files to pypi
-	echo "uploading for files for tag ${TRAVIS_TAG}"
-	twine upload dist/*
-fi
 
 exit 0
