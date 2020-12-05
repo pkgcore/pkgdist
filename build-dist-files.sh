@@ -12,7 +12,7 @@ pip install -r requirements/dist.txt
 # hack cibuildwheel to run docker in privileged mode in order to
 # decrease the amount of test workarounds
 CIBW_PATH=$(pip show cibuildwheel | grep Location | cut -d' ' -f 2)/cibuildwheel
-sed -i "s:'CIBUILDWHEEL',:\0 '--privileged',:" "${CIBW_PATH}"/linux.py
+sed -i "s:'CIBUILDWHEEL',:\0 '--privileged',:" "${CIBW_PATH}"/docker_container.py
 
 # download binaries to update old centos 5 manylinux containers
 DOWNLOAD_DIR="${HOME}/downloads"
